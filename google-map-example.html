@@ -122,6 +122,11 @@
           travelMode: 'BICYCLING'
         }, function(response, status) {
           if (status === 'OK') {
+            // getWeather(lat, long);V
+            console.log("point 1 lat", response.routes[0].overview_path[0].lat());
+            console.log("point 1 long", response.routes[0].overview_path[0].lng());
+            console.log("point 2 lat", response.routes[0].overview_path[1].lat());
+            console.log("point 1 long", response.routes[0].overview_path[1].lng());
             directionsDisplay.setDirections(response);
           } else {
             window.alert('Directions request failed due to ' + status);
