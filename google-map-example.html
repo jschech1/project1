@@ -13,7 +13,9 @@
     <style>
         /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
+
         /* Optional: Makes the sample page fill the window. */
+
         html,
         body {
             height: 100%;
@@ -22,54 +24,24 @@
             font-family: 'Lato', sans-serif;
             background-color: #b1b1b1;
         }
-        #floating-panel {
-            position: absolute;
-            top: 10px;
-            left: 25%;
-            z-index: 5;
-            background-color: #fff;
+
+        #container{
+            background-color: white;
+            width: 90%;
+            margin: 20px auto 10px auto;
             padding: 5px;
             border: 1px solid #999;
-            text-align: center;
-            line-height: 30px;
-            padding-left: 10px;
-        }
-        #right-panel {
-            line-height: 30px;
-            padding-left: 10px;
-        }
-        #right-panel select,
-        #right-panel input {
-            font-size: 15px;
-        }
-        #right-panel select {
-            width: 100%;
-        }
-        #right-panel i {
-            font-size: 12px;
-        }
-        #right-panel {
-            height: 100%;
-            float: right;
-            width: 390px;
-            overflow: auto;
-        }
-        #map {
-            margin: 30px auto 0 auto;
-            height: 60%;
-            width: 90%;
+            font-family: 'Roboto', 'sans-serif';
             border-radius: 4px;
-        }
-        #floating-panel {
-            background: #fff;
-            padding: 5px;
-            font-size: 14px;
-            border: 1px solid #ccc;
+            margin-top: 20px;
+           
+            line-height: 30px;
+            padding-left: 10px;
             box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
-            display: none;
-            width: 82%;
+
         }
-        #summary-panel {
+
+         #summary-panel {
             /* position: absolute; */
             /* left: 7%; */
             width: 90%;
@@ -88,42 +60,130 @@
             border-radius: 4px;
             text-align: center;
         }
+
+
+        #floating-panel {
+            position: absolute;
+            top: 10px;
+            left: 25%;
+            z-index: 5;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #999;
+            text-align: center;
+            line-height: 30px;
+            padding-left: 10px;
+        }
+
+        #right-panel {
+            line-height: 30px;
+            padding-left: 10px;
+        }
+
+        #right-panel select,
+        #right-panel input {
+            font-size: 15px;
+        }
+
+        #right-panel select {
+            width: 100%;
+        }
+
+        #right-panel i {
+            font-size: 12px;
+        }
+
+        #right-panel {
+            height: 100%;
+            float: right;
+            width: 390px;
+            overflow: auto;
+        }
+
+        #map {
+            margin: 30px auto 0 auto;
+            height: 60%;
+            width: 90%;
+            border-radius: 4px;
+        }
+
+        #floating-panel {
+            background: #fff;
+            padding: 5px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+            display: none;
+            width: 82%;
+        }
+
+       
+
         h3 {
             text-align: center;
         }
+
         #route-entry {
             margin: auto;
             text-align: center;
+
         }
-        #start,
-        #end {
-            width: 90%;
-            margin: 10px auto 15px auto;
+
+        #start{
+            width: 50%;
+            margin: 1px auto 15px auto;
             display: block;
             background-color: white;
-            border-radius: 4px;
+           
         }
+
+        
+        #end {
+            width: 50%;
+            margin: -8px auto 1px auto;
+            display: block;
+            background-color: white;
+        
+        }
+
+        select{
+            border-color: #9e9e9e;
+        }
+
+        
+
         #weather-points {
             display: block;
             width: 20%;
             margin: 0 auto 10px auto;
         }
 
-        input::-webkit-input-placeholder{
+        input::-webkit-input-placeholder {
             color: gray;
-           
+
         }
 
         input {
-  text-indent:10px;
-}
+            text-indent: 10px;
+        }
 
-i.right {
-    margin-left: 10px;
-}
+        i.right {
+            margin-left: 10px;
+        }
 
-        #point-options{
-            color: white;
+        #point-options {
+            color: #808080;
+            margin-top: -5px;
+        }
+
+        img {
+            width: 15%;
+            padding-top: 10px;
+        }
+
+        .btn {
+            background-color: #026b54;
+            margin-bottom: 5px;
         }
 
         @media print {
@@ -138,22 +198,24 @@ i.right {
         }
 
         @media screen and (max-width: 768px) {
-  /* The body's bg color will be #333 */
-  body {
-    background-color: #b1b1b1;
-  }
+            /* The body's bg color will be #333 */
+            body {
+                background-color: #b1b1b1;
+            }
 
-  /* The wrapper's width will be 600px */
-  .wrapper {
-    width: 600px;
-  }
+            /* The wrapper's width will be 600px */
+            .wrapper {
+                width: 600px;
+            }
 
-  #start, #end, #map, #summary-panel {
-    width: 90%;
-  }
+            #start,
+            #end,
+            #map,
+            #summary-panel {
+                width: 50%;
+            }
 
-}
-
+        }
     </style>
 </head>
 
@@ -163,7 +225,11 @@ i.right {
 
 
     <!-- <div id="floating-panel"> -->
+<div id="container">
     <div id="route-entry">
+        <div id="logo">
+            <img src="assets/images/Bike-Route-Sign.jpg">
+        </div>
         <input placeholder="Start Location" type="text" id="start"></input>
         <input placeholder="Destination" type="text" id="end"></input>
         <label for="weather-points" id="point-options">Select Number of Weather Points</label>
@@ -182,16 +248,15 @@ i.right {
             <option value="12">12</option>
         </select>
         <button class="btn waves-effect waves-light" id="get-weather" type="submit" name="action">Get Route
-                <i class="small material-icons right">directions_bike</i>
+            <i class="small material-icons right">directions_bike</i>
         </button>
     </div>
-
+</div>
 
     <!-- <div id="right-panel"></div> -->
     <div id="map"></div>
 
-    <div id="summary-panel">
-    </div>
+    <div id="summary-panel"></div>
 
 </body>
 
@@ -219,7 +284,7 @@ i.right {
         var onChangeHandler = function () {
             calculateAndDisplayRoute(directionsService, directionsDisplay);
         };
-        var dragHandler = function () { 
+        var dragHandler = function () {
             recalculateDisplayedRoute(directionsDisplay);
         }
         // document.getElementById('start').addEventListener('change', onChangeHandler);
@@ -267,7 +332,7 @@ i.right {
         };
     }
     function getMarker(lat, lng) {
-            console.log("marker lat", lat)
+        console.log("marker lat", lat)
         var marker = new google.maps.Marker({
             position: { lat: lat, lng: lng },
             map: map,
@@ -287,7 +352,10 @@ i.right {
             var windSpeed = response.wind.speed;
             var windDir = response.wind.deg;
             var panelDiv = $("#summary-panel").append("<p>");
-                console.log(response.coord);
+            console.log(response.coord);
+
+            // <i class="small material-icons right">
+
             panelDiv.append("<div><strong>Conditions: </strong>" + desc + "</div>");
             panelDiv.append("<div><strong>Temperature: </strong>" + temp + "</div>");
             panelDiv.append("<div><strong>Wind Speed: </strong>" + windSpeed + "</div>");
