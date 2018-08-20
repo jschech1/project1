@@ -339,6 +339,7 @@
         var weatherPoints = document.getElementById('weather-points').value;
         var newRoute = directionsDisplay.getDirections();
         var newPointsArr = newRoute.routes[0].overview_path;
+        weatherMarkers = [];
         getAll(weatherPoints, newPointsArr);
         wind = [];
     }
@@ -368,7 +369,7 @@
         clearSummaryPanel();
         deleteMarkers(weatherMarkers);
         var interval = Math.floor(array.length / numOfIntervals);
-        for (var i = 1; i < array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             if (i % interval == 0) {
                 console.log("i", i);
                 var intervalLat = array[i].lat;
@@ -381,6 +382,7 @@
 
     function getMarker(lat, lng) {
         console.log("marker lat", lat)
+        var selectedMarkerIndex;
         var marker = new google.maps.Marker({
             position: { lat: lat, lng: lng },
             map: map,
@@ -388,8 +390,21 @@
         })
         weatherMarkers.push(marker);
         marker.addListener("mouseover", (event) => {
-            console.log(event.latLng.lat());
+            console.log("mouseover");
+            weatherMarkers.forEach(function (marker, index) {
+                if (marker.position.lat() == event.latLng.lat()) {
+                    selectedMarkerIndex = index;
+                    console.log(index);
+                    highlightSummaryDiv(index, "#ccc");
+                }
+            })
         })
+        
+        marker.addListener("mouseout", (event) => {
+            console.log("mouseout");
+            highlightSummaryDiv(selectedMarkerIndex, "white");
+        })
+
     }
 
     function getWeather(lat, lng, callback) {
@@ -408,6 +423,16 @@
         var windSpeed = response.wind.speed;
         var windDir = response.wind.deg;
         var icon = "<img src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
+<<<<<<< HEAD
+        var panelDiv = $("#summary-panel");
+        var item = $("<div>");
+        $(panelDiv).append(item);
+        $(item).append(icon + "<br>");
+        $(item).append("<strong>Conditions: </strong>" + desc + "<br>");
+        $(item).append("<strong>Temperature: </strong>" + temp + "<br>");
+        $(item).append("<strong>Wind Speed: </strong>" + windSpeed + "<br>");
+        $(item).append("<strong>Wind Direction: </strong>" + windDir + "<hr>");
+=======
         var panelDiv = $("#summary-panel").append("<p>");
         $(panelDiv).attr("data-coord", )
         console.log(response.coord);
@@ -417,6 +442,7 @@
         panelDiv.append("<div><strong>Wind Speed: </strong>" + windSpeed + "</div>");
         panelDiv.append("<div><strong>Wind Direction: </strong>" + windDir + "</div><hr>");
         wind.push(windSpeed);
+>>>>>>> c2ee5b82af64b2be1137caa3f0d927455d12c793
     }
     $("#windWatch").on("click", function(event) {
         windWatch(wind[0]);
@@ -584,6 +610,11 @@
         });
         weatherInfoWindow.open(map, clickedMarker)
         })
+    }
+    function highlightSummaryDiv (index, color) {
+       var divOfInterest = document.getElementById("summary-panel").children[index];
+       $(divOfInterest).css("background-color", color);
+
     }
 
 
