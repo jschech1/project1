@@ -6,8 +6,8 @@
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
     <title>Perfect Route</title>
     <style>
         /* Always set the map height explicitly to define the size of the div
@@ -21,6 +21,47 @@
             margin: 0;
             padding: 0;
             font-family: 'Lato', sans-serif;
+            background-color: #b1b1b1;
+        }
+
+        #container {
+            background-color: white;
+            width: 90%;
+            margin: 20px auto 10px auto;
+            padding: 5px;
+            border: 1px solid #999;
+            font-family: 'Roboto', 'sans-serif';
+            border-radius: 4px;
+            margin-top: 20px;
+            line-height: 30px;
+            padding-left: 10px;
+            box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+        }
+
+        #summary-panel {
+            /* position: absolute; */
+            /* left: 7%; */
+            width: 90%;
+            /* bottom: 30px; */
+            /* z-index: 5; */
+            margin: 20px auto 10px auto;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #999;
+            text-align: center;
+            font-family: 'Roboto', 'sans-serif';
+            line-height: 30px;
+            padding-left: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        #clearMarkers {
+            position: absolute;
+            left: 50%;
+            /* display: hidden; */
         }
 
         #floating-panel {
@@ -37,7 +78,6 @@
         }
 
         #right-panel {
-
             line-height: 30px;
             padding-left: 10px;
         }
@@ -65,7 +105,8 @@
         #map {
             margin: 30px auto 0 auto;
             height: 60%;
-            width: 50%
+            width: 90%;
+            border-radius: 4px;
         }
 
         #floating-panel {
@@ -76,30 +117,6 @@
             box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
             display: none;
             width: 82%;
-
-        }
-
-        #summary-panel {
-
-            /* position: absolute; */
-            /* left: 7%; */
-            width: 50%;
-            /* bottom: 30px; */
-            /* z-index: 5; */
-            margin: 20px auto 10px auto;
-            background-color: #fff;
-            padding: 5px;
-            border: 1px solid #999;
-            text-align: center;
-            font-family: 'Roboto', 'sans-serif';
-            line-height: 30px;
-            padding-left: 10px;
-            border: 1px solid #ccc;
-            box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
-
-
-            text-align: center;
-
         }
 
         #clearMarkers {
@@ -112,18 +129,27 @@
             text-align: center;
         }
 
-
         #route-entry {
             margin: auto;
             text-align: center;
         }
 
-        #start,
-        #end {
-
+        #start {
             width: 50%;
-            margin: 10px auto 15px auto;
+            margin: 1px auto 15px auto;
             display: block;
+            background-color: white;
+        }
+
+        #end {
+            width: 50%;
+            margin: -8px auto 1px auto;
+            display: block;
+            background-color: white;
+        }
+
+        select {
+            border-color: #9e9e9e;
         }
 
         #weather-points {
@@ -132,6 +158,32 @@
             margin: 0 auto 10px auto;
         }
 
+        input::-webkit-input-placeholder {
+            color: gray;
+        }
+
+        input {
+            text-indent: 10px;
+        }
+
+        i.right {
+            margin-left: 10px;
+        }
+
+        #point-options {
+            color: #808080;
+            margin-top: -5px;
+        }
+
+        img {
+            width: 15%;
+            padding-top: 10px;
+        }
+
+        .btn {
+            background-color: #026b54;
+            margin-bottom: 5px;
+        }
 
         @media print {
             #map {
@@ -143,6 +195,23 @@
                 width: auto;
             }
         }
+
+        @media screen and (max-width: 768px) {
+            /* The body's bg color will be #333 */
+            body {
+                background-color: #b1b1b1;
+            }
+            /* The wrapper's width will be 600px */
+            .wrapper {
+                width: 600px;
+            }
+            #start,
+            #end,
+            #map,
+            #summary-panel {
+                width: 90%;
+            }
+        }
     </style>
 </head>
 
@@ -152,46 +221,42 @@
 
 
     <!-- <div id="floating-panel"> -->
-    <div id="route-entry">
-        <input placeholder="Start Location" type="text" id="start"></input>
-        <div id="startInfowindow-content">
-            <img src="" width="16" height="16" id="place-icon-end">
-            <span id="place-name-start" class="title"></span>
-            <br>
-            <span id="place-address-start"></span>
+
+    <div id="container">
+        <div id="route-entry">
+            <div id="logo">
+                <img src="assets/images/Bike-Route-Sign.jpg">
+            </div>
+            <input placeholder="Start Location" type="text" id="start"></input>
+            <input placeholder="Destination" type="text" id="end"></input>
+            <label for="weather-points" id="point-options">Select Number of Weather Points</label>
+            <select name="weather-points" id="weather-points">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            <button class="btn waves-effect waves-light" id="get-weather" type="submit" name="action">Get Route
+                <i class="small material-icons right">directions_bike</i>
+            </button>
         </div>
-        <input placeholder="Destination" type="text" id="end"></input>
-        <div id="endInfowindow-content">
-            <img src="" width="16" height="16" id="place-icon-end">
-            <span id="place-name-end" class="title"></span>
-            <br>
-            <span id="place-address-end"></span>
-        </div>
-        <label for="weather-points">Select Number of Weather Points</label>
-        <select name="weather-points" id="weather-points">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-        </select>
-        <button class="btn waves-effect waves-light" id="get-weather" type="submit" name="action">Get Route
-            <i class="directions_bike left"></i>
-        </button>
+
     </div>
 
 
     <!-- <div id="right-panel"></div> -->
     <div id="map">
-        <div id = "clearMarkers">
-            <button id = "clearMarkersBtn">Clear Markers</button>
+        <div id="clearMarkers">
+            <button id="clearMarkersBtn">Clear Markers</button>
+
         </div>
     </div>
 
@@ -318,6 +383,7 @@
     function appendWeatherToSummary(response) {
         console.log(response);
         console.log(lat);
+
         var desc = response.weather[0].description;
         var temp = response.main.temp;
         var windSpeed = response.wind.speed;
@@ -345,6 +411,74 @@
     function deleteMarkers(markerArray) {
         setMapOnAll(null, markerArray);
         markerArray = [];
+
+    }
+    function getAutocomplete(input, infowindowContent) {
+
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            startEndMarkers.push(marker);
+            map.panTo(place.geometry.location);
+            // setBounds(startEndMarkers);
+            map.setZoom(12);  // Why 17? Because it looks good.
+
+            var address = "";
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+        });
+    }
+    function setBounds(markerArray) {
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < markerArray.length; i++) {
+            bounds.extend(markerArray[i].getPosition())
+        }
+        map.fitBounds(bounds);
+    }
+    function placeWeatherMarker(location) {
+        console.log(location);
+        var clickedMarker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+        clickedMarkers.push(clickedMarker);
+        getWeather(location.lat(), location.lng(), function (response) {
+            var latitude = location.lat();
+            var longitude = location.lng();
+            var desc = response.weather[0].description;
+            var temp = response.main.temp;
+            var windSpeed = response.wind.speed;
+            var windDir = response.wind.deg;
+            var icon = "<img src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
+            var popupContent = "<p class = 'popupText'><strong>Weather here: </strong><br>" +
+                + desc + "<br>" +
+                "Temperature: " + temp + "<br>" +
+                "Wind Speed: " + windSpeed + "<br>" +
+                "Wind Direction: " + windDir + "<br></p>";
+            var weatherInfoWindow = new google.maps.InfoWindow({
+                content: popupContent
+            });
+            weatherInfoWindow.open(map, clickedMarker)
+        })
+    }
+
     }
     function getAutocomplete(input, infowindowContent) {
 
@@ -411,6 +545,7 @@
         weatherInfoWindow.open(map, clickedMarker)
         })
     }
+
 
 
 
