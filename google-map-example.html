@@ -184,6 +184,21 @@
             background-color: #026b54;
             margin-bottom: 5px;
         }
+        
+        #windWatch {
+            border-radius: 50%;
+            padding: 30px;
+            background-color: white; 
+            color: black; 
+            border: 2px solid #008CBA;
+            margin-left: 686px;
+        }
+     
+
+        #windWatch:hover {
+        background-color: #008CBA;
+        color: white;
+        }
 
         @media print {
             #map {
@@ -250,6 +265,10 @@
         </div>
 
     </div>
+
+    <div>
+            <button id="windWatch">WindWatch™</button>
+        </div>
 
 
     <!-- <div id="right-panel"></div> -->
@@ -322,6 +341,7 @@
         var newPointsArr = newRoute.routes[0].overview_path;
         weatherMarkers = [];
         getAll(weatherPoints, newPointsArr);
+        wind = [];
     }
     function calculateAndDisplayRoute(directionsService, directionsDisplay) {
         var start = document.getElementById('start').value;
@@ -394,7 +414,7 @@
             method: "GET",
         }).then(callback);
     }
-
+    wind = [];
     function appendWeatherToSummary(response) {
         console.log(response);
 
@@ -403,6 +423,7 @@
         var windSpeed = response.wind.speed;
         var windDir = response.wind.deg;
         var icon = "<img src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
+<<<<<<< HEAD
         var panelDiv = $("#summary-panel");
         var item = $("<div>");
         $(panelDiv).append(item);
@@ -411,7 +432,39 @@
         $(item).append("<strong>Temperature: </strong>" + temp + "<br>");
         $(item).append("<strong>Wind Speed: </strong>" + windSpeed + "<br>");
         $(item).append("<strong>Wind Direction: </strong>" + windDir + "<hr>");
+=======
+        var panelDiv = $("#summary-panel").append("<p>");
+        $(panelDiv).attr("data-coord", )
+        console.log(response.coord);
+        panelDiv.append("<div>" + icon + "</div>");
+        panelDiv.append("<div><strong>Conditions: </strong>" + desc + "</div>");
+        panelDiv.append("<div><strong>Temperature: </strong>" + temp + "</div>");
+        panelDiv.append("<div><strong>Wind Speed: </strong>" + windSpeed + "</div>");
+        panelDiv.append("<div><strong>Wind Direction: </strong>" + windDir + "</div><hr>");
+        wind.push(windSpeed);
+>>>>>>> c2ee5b82af64b2be1137caa3f0d927455d12c793
     }
+    $("#windWatch").on("click", function(event) {
+        windWatch(wind[0]);
+        console.log("wind array", wind);
+
+    
+    function windWatch(wind) {
+    if (wind > 1 && wind <= 10) {
+        // html turns green
+        $("#windWatch").css("background", "rgba(76, 175, 80, 0.6)")
+    };
+    if (wind > 10.1 && wind <= 20) {
+        // html turns yellow
+        $("#windWatch").css("background", "rgba(255,255,0, 0.5)")
+    }
+    if (wind > 20.1) {
+        // document.write("got it"), html turns red
+        $("#windWatch").css("background", "rgba(255, 0, 0, 0.6)")
+    };
+
+    };//end of windWatch
+});
     function clearSummaryPanel() {
         $("#summary-panel").empty();
     }
