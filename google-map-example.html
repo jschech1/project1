@@ -102,6 +102,12 @@
 
         }
 
+        #clearMarkers {
+            position: absolute;
+            left: 50%;
+            /* display: hidden; */
+        }
+
         h3 {
             text-align: center;
         }
@@ -148,7 +154,19 @@
     <!-- <div id="floating-panel"> -->
     <div id="route-entry">
         <input placeholder="Start Location" type="text" id="start"></input>
+        <div id="startInfowindow-content">
+            <img src="" width="16" height="16" id="place-icon-end">
+            <span id="place-name-start" class="title"></span>
+            <br>
+            <span id="place-address-start"></span>
+        </div>
         <input placeholder="Destination" type="text" id="end"></input>
+        <div id="endInfowindow-content">
+            <img src="" width="16" height="16" id="place-icon-end">
+            <span id="place-name-end" class="title"></span>
+            <br>
+            <span id="place-address-end"></span>
+        </div>
         <label for="weather-points">Select Number of Weather Points</label>
         <select name="weather-points" id="weather-points">
             <option value="1">1</option>
@@ -171,7 +189,11 @@
 
 
     <!-- <div id="right-panel"></div> -->
-    <div id="map"></div>
+    <div id="map">
+        <div id = "clearMarkers">
+            <button id = "clearMarkersBtn">Clear Markers</button>
+        </div>
+    </div>
 
     <div id="summary-panel">
     </div>
@@ -185,7 +207,10 @@
 
     var routeArray = [];
     var map;
-    var markers = [];
+    var weatherMarkers = [];
+    var clickedMarkers = [];
+    var startEndMarkers = [];
+    var count = 0; //count for use with setBounds to set bounds after 2nd location entered
     function initMap() {
 
         var directionsDisplay = new google.maps.DirectionsRenderer({
@@ -195,11 +220,21 @@
         });
         var directionsService = new google.maps.DirectionsService;
         map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 7,
+            zoom: 12,
             center: { lat: 39.74, lng: -104.99 }
         });
+
+        var startInput = document.getElementById('start');
+        var endInput = document.getElementById('end');
+        var startInfowindowContent = document.getElementById('startInfowindow-content')
+        var endInfowindowContent = document.getElementById('endInfowindow-content')
+
+        getAutocomplete(startInput, startInfowindowContent);
+        getAutocomplete(endInput, endInfowindowContent);
+
         directionsDisplay.setMap(map);
         directionsDisplay.setPanel(document.getElementById('right-panel'));
+
         // var control = document.getElementById('floating-panel');
         // control.style.display = 'block';
         // map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
@@ -207,12 +242,13 @@
             calculateAndDisplayRoute(directionsService, directionsDisplay);
         };
 
-        var dragHandler = function () { 
+        var dragHandler = function () {
             recalculateDisplayedRoute(directionsDisplay);
         }
-        // document.getElementById('start').addEventListener('change', onChangeHandler);
+
         document.getElementById('get-weather').addEventListener('click', onChangeHandler);
-        directionsDisplay.addListener('directions_changed', dragHandler) //this listener is the problem...
+        directionsDisplay.addListener('directions_changed', dragHandler);
+        google.maps.event.addListener(map, 'click', (event) => placeWeatherMarker(event.latLng));
     }
 
     function recalculateDisplayedRoute(directionsDisplay) {
@@ -235,7 +271,7 @@
         }, function (response, status) {
             if (status === 'OK') {
                 var pointsArr = response.routes[0].overview_path;
-                // getAll(weatherPoints, pointsArr);
+                console.log(response);
                 directionsDisplay.setDirections(response);
             } else {
                 window.alert('Directions request failed due to ' + status);
@@ -245,64 +281,142 @@
 
     function getAll(numOfIntervals, array) {
         clearSummaryPanel();
-        deleteMarkers();
+        deleteMarkers(weatherMarkers);
         var interval = Math.floor(array.length / numOfIntervals);
-        for (var i = 0; i < array.length; i++) {
+        for (var i = 1; i < array.length; i++) {
             if (i % interval == 0) {
-                console.log("i", i)
+                console.log("i", i);
                 var intervalLat = array[i].lat;
                 var intervalLng = array[i].lng;
                 getMarker(intervalLat(), intervalLng());
-                getWeather(intervalLat(), intervalLng());
+                getWeather(intervalLat(), intervalLng(), appendWeatherToSummary);
             }
         };
     }
 
     function getMarker(lat, lng) {
-            console.log("marker lat", lat)
+        console.log("marker lat", lat)
         var marker = new google.maps.Marker({
             position: { lat: lat, lng: lng },
             map: map,
             animation: google.maps.Animation.DROP
         })
-        markers.push(marker);
+        weatherMarkers.push(marker);
+        marker.addListener("mouseover", (event) => {
+            console.log(event.latLng.lat());
+        })
     }
 
-    function getWeather(lat, lng) {
-        console.log("weather lat", lat);
+    function getWeather(lat, lng, callback) {
         var queryURL = "http://api.openweathermap.org/data/2.5/weather?APPID=1af38fcbab6d390a11b52f1a3c19fe7f&units=imperial&lat=" + lat + "&lon=" + lng;
         $.ajax({
             url: queryURL,
             method: "GET",
-        }).then(function (response) {
-            var desc = response.weather[0].description;
-            var temp = response.main.temp;
-            var windSpeed = response.wind.speed;
-            var windDir = response.wind.deg;
-            var panelDiv = $("#summary-panel").append("<p>");
-                console.log(response.coord);
-            panelDiv.append("<div><strong>Conditions: </strong>" + desc + "</div>");
-            panelDiv.append("<div><strong>Temperature: </strong>" + temp + "</div>");
-            panelDiv.append("<div><strong>Wind Speed: </strong>" + windSpeed + "</div>");
-            panelDiv.append("<div><strong>Wind Direction: </strong>" + windDir + "</div>");
-        })
+        }).then(callback);
+    }
+
+    function appendWeatherToSummary(response) {
+        console.log(response);
+        console.log(lat);
+        var desc = response.weather[0].description;
+        var temp = response.main.temp;
+        var windSpeed = response.wind.speed;
+        var windDir = response.wind.deg;
+        var icon = "<img src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
+        var panelDiv = $("#summary-panel").append("<p>");
+        $(panelDiv).attr("data-coord", )
+        console.log(response.coord);
+        panelDiv.append("<div>" + icon + "</div>");
+        panelDiv.append("<div><strong>Conditions: </strong>" + desc + "</div>");
+        panelDiv.append("<div><strong>Temperature: </strong>" + temp + "</div>");
+        panelDiv.append("<div><strong>Wind Speed: </strong>" + windSpeed + "</div>");
+        panelDiv.append("<div><strong>Wind Direction: </strong>" + windDir + "</div><hr>");
     }
     function clearSummaryPanel() {
         $("#summary-panel").empty();
     }
 
-    function setMapOnAll(map) {
-        for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(map);
+    function setMapOnAll(map, markerArray) {
+        for (var i = 0; i < markerArray.length; i++) {
+            markerArray[i].setMap(map);
         }
     }
 
-    function deleteMarkers() {
-        setMapOnAll(null);
-        markers = [];
+    function deleteMarkers(markerArray) {
+        setMapOnAll(null, markerArray);
+        markerArray = [];
     }
+    function getAutocomplete(input, infowindowContent) {
+
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            startEndMarkers.push(marker);
+                map.panTo(place.geometry.location);
+                // setBounds(startEndMarkers);
+                map.setZoom(12);  // Why 17? Because it looks good.
+
+            var address = "";
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+        });
+    }
+    function setBounds(markerArray) {
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < markerArray.length; i++) {
+            bounds.extend(markerArray[i].getPosition())
+        }
+        map.fitBounds(bounds);
+    }
+    function placeWeatherMarker(location) {
+        console.log(location);
+        var clickedMarker = new google.maps.Marker({
+            position: location, 
+            map: map
+        });
+        clickedMarkers.push(clickedMarker);
+        getWeather(location.lat(), location.lng(), function(response) {
+        var latitude = location.lat();
+        var longitude = location.lng();
+        var desc = response.weather[0].description;
+        var temp = response.main.temp;
+        var windSpeed = response.wind.speed;
+        var windDir = response.wind.deg;
+        var icon = "<img src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
+        var popupContent = "<p class = 'popupText'><strong>Weather here: </strong><br>" + 
+        + desc + "<br>" + 
+        "Temperature: " + temp + "<br>" + 
+        "Wind Speed: " + windSpeed + "<br>" + 
+        "Wind Direction: " + windDir + "<br></p>";
+        var weatherInfoWindow = new google.maps.InfoWindow({
+            content: popupContent
+        });
+        weatherInfoWindow.open(map, clickedMarker)
+        })
+    }
+
+
+
+
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqEyqqpMD23rErtt__7gxgYsuA6pfYdOE&callback=initMap">
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqEyqqpMD23rErtt__7gxgYsuA6pfYdOE&libraries=places&callback=initMap">
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
 
