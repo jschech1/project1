@@ -423,7 +423,7 @@
         var windSpeed = response.wind.speed;
         var windDir = response.wind.deg;
         var icon = "<img src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
-<<<<<<< HEAD
+
         var panelDiv = $("#summary-panel");
         var item = $("<div>");
         $(panelDiv).append(item);
@@ -432,17 +432,8 @@
         $(item).append("<strong>Temperature: </strong>" + temp + "<br>");
         $(item).append("<strong>Wind Speed: </strong>" + windSpeed + "<br>");
         $(item).append("<strong>Wind Direction: </strong>" + windDir + "<hr>");
-=======
-        var panelDiv = $("#summary-panel").append("<p>");
-        $(panelDiv).attr("data-coord", )
-        console.log(response.coord);
-        panelDiv.append("<div>" + icon + "</div>");
-        panelDiv.append("<div><strong>Conditions: </strong>" + desc + "</div>");
-        panelDiv.append("<div><strong>Temperature: </strong>" + temp + "</div>");
-        panelDiv.append("<div><strong>Wind Speed: </strong>" + windSpeed + "</div>");
-        panelDiv.append("<div><strong>Wind Direction: </strong>" + windDir + "</div><hr>");
+
         wind.push(windSpeed);
->>>>>>> c2ee5b82af64b2be1137caa3f0d927455d12c793
     }
     $("#windWatch").on("click", function(event) {
         windWatch(wind[0]);
