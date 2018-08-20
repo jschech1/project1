@@ -373,7 +373,7 @@
     }
 
     function getWeather(lat, lng, callback) {
-        var queryURL = "http://api.openweathermap.org/data/2.5/weather?APPID=1af38fcbab6d390a11b52f1a3c19fe7f&units=imperial&lat=" + lat + "&lon=" + lng;
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?APPID=1af38fcbab6d390a11b52f1a3c19fe7f&units=imperial&lat=" + lat + "&lon=" + lng;
         $.ajax({
             url: queryURL,
             method: "GET",
