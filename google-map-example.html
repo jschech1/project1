@@ -8,14 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
     <title>Perfect Route</title>
     <style>
         /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-
         /* Optional: Makes the sample page fill the window. */
-
         html,
         body {
             height: 100%;
@@ -24,8 +21,7 @@
             font-family: 'Lato', sans-serif;
             background-color: #b1b1b1;
         }
-
-        #container{
+        #container {
             background-color: white;
             width: 90%;
             margin: 20px auto 10px auto;
@@ -34,17 +30,14 @@
             font-family: 'Roboto', 'sans-serif';
             border-radius: 4px;
             margin-top: 20px;
-           
             line-height: 30px;
             padding-left: 10px;
             box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
-
         }
-
-         #summary-panel {
+        #summary-panel {
             /* position: absolute; */
             /* left: 7%; */
-            width: 90%;
+            width: 50%;
             /* bottom: 30px; */
             /* z-index: 5; */
             margin: 20px auto 10px auto;
@@ -60,8 +53,11 @@
             border-radius: 4px;
             text-align: center;
         }
-
-
+        #clearMarkers {
+            position: absolute;
+            left: 50%;
+            /* display: hidden; */
+        }
         #floating-panel {
             position: absolute;
             top: 10px;
@@ -74,39 +70,32 @@
             line-height: 30px;
             padding-left: 10px;
         }
-
         #right-panel {
             line-height: 30px;
             padding-left: 10px;
         }
-
         #right-panel select,
         #right-panel input {
             font-size: 15px;
         }
-
         #right-panel select {
             width: 100%;
         }
-
         #right-panel i {
             font-size: 12px;
         }
-
         #right-panel {
             height: 100%;
             float: right;
             width: 390px;
             overflow: auto;
         }
-
         #map {
             margin: 30px auto 0 auto;
             height: 60%;
             width: 90%;
             border-radius: 4px;
         }
-
         #floating-panel {
             background: #fff;
             padding: 5px;
@@ -116,69 +105,82 @@
             display: none;
             width: 82%;
         }
-
-       
-
+        #clearMarkers {
+            position: absolute;
+            left: 50%;
+            /* display: hidden; */
+        }
         h3 {
             text-align: center;
         }
-
         #route-entry {
             margin: auto;
             text-align: center;
-
         }
-
-        #start{
+        #start {
             width: 50%;
             margin: 1px auto 15px auto;
             display: block;
             background-color: white;
-           
         }
-
-        
         #end {
             width: 50%;
             margin: -8px auto 1px auto;
             display: block;
             background-color: white;
-        
         }
-
-        select{
+        select {
             border-color: #9e9e9e;
         }
-
-        
-
         #weather-points {
             display: block;
             width: 20%;
             margin: 0 auto 10px auto;
         }
-
         input::-webkit-input-placeholder {
             color: gray;
-
         }
-
         input {
             text-indent: 10px;
         }
-
         i.right {
             margin-left: 10px;
         }
-
         #point-options {
             color: #808080;
             margin-top: -5px;
         }
+        #icon-display {
+            width: 12%;
+            margin: -15px 0px;
+        }
 
-        img {
-            width: 15%;
-            padding-top: 10px;
+         #logo {
+            width: 12%;
+        }
+
+        #temp-icon{
+            width: 3%;
+            margin-bottom: -5px;
+        }
+
+        #wind-icon{
+            width: 3%;
+            margin-bottom: -5px;
+        }
+
+         #direction-icon{
+            width: 3%;
+            margin-bottom: -5px;
+        }
+
+         #humidity-icon{
+            width: 3%;
+            margin-bottom: -5px;
+        }
+
+        .text-display{
+            font-size: 20px;
         }
 
         .btn {
@@ -186,6 +188,9 @@
             margin-bottom: 5px;
         }
 
+        hr{
+            width: 90%;
+        }
         @media print {
             #map {
                 height: 500px;
@@ -196,25 +201,23 @@
                 width: auto;
             }
         }
-
         @media screen and (max-width: 768px) {
             /* The body's bg color will be #333 */
             body {
                 background-color: #b1b1b1;
             }
-
             /* The wrapper's width will be 600px */
             .wrapper {
                 width: 600px;
             }
-
             #start,
             #end,
             #map,
-            #summary-panel {
-                width: 50%;
+            {
+                width: 90%;
             }
 
+            
         }
     </style>
 </head>
@@ -225,38 +228,49 @@
 
 
     <!-- <div id="floating-panel"> -->
-<div id="container">
-    <div id="route-entry">
-        <div id="logo">
-            <img src="assets/images/Bike-Route-Sign.jpg">
+
+    <div id="container">
+        <div id="route-entry">
+            <div>
+                <img id="logo" src="assets/images/Bike-Route-Sign.jpg">
+            </div>
+            <input placeholder="Start Location" type="text" id="start"></input>
+            <input placeholder="Destination" type="text" id="end"></input>
+            <label for="weather-points" id="point-options">Select Number of Weather Points</label>
+            <select name="weather-points" id="weather-points">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            <button class="btn waves-effect waves-light" id="get-weather" type="submit" name="action">Get Route
+                <i class="small material-icons right">directions_bike</i>
+            </button>
         </div>
-        <input placeholder="Start Location" type="text" id="start"></input>
-        <input placeholder="Destination" type="text" id="end"></input>
-        <label for="weather-points" id="point-options">Select Number of Weather Points</label>
-        <select name="weather-points" id="weather-points">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-        </select>
-        <button class="btn waves-effect waves-light" id="get-weather" type="submit" name="action">Get Route
-            <i class="small material-icons right">directions_bike</i>
-        </button>
+
     </div>
-</div>
+
 
     <!-- <div id="right-panel"></div> -->
-    <div id="map"></div>
+  
+    <div id="map">
+        <div id="clearMarkers">
+            <button id="clearMarkersBtn">Clear Markers</button>
 
-    <div id="summary-panel"></div>
+        </div>
+    </div>
+
+    <div id="summary-panel">
+    </div>
+
 
 </body>
 
@@ -265,7 +279,10 @@
     //our global variables
     var routeArray = [];
     var map;
-    var markers = [];
+    var weatherMarkers = [];
+    var clickedMarkers = [];
+    var startEndMarkers = [];
+    var count = 0; //count for use with setBounds to set bounds after 2nd location entered
     function initMap() {
         var directionsDisplay = new google.maps.DirectionsRenderer({
             draggable: true,
@@ -273,9 +290,15 @@
         });
         var directionsService = new google.maps.DirectionsService;
         map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 7,
+            zoom: 12,
             center: { lat: 39.74, lng: -104.99 }
         });
+        var startInput = document.getElementById('start');
+        var endInput = document.getElementById('end');
+        var startInfowindowContent = document.getElementById('startInfowindow-content')
+        var endInfowindowContent = document.getElementById('endInfowindow-content')
+        getAutocomplete(startInput, startInfowindowContent);
+        getAutocomplete(endInput, endInfowindowContent);
         directionsDisplay.setMap(map);
         directionsDisplay.setPanel(document.getElementById('right-panel'));
         // var control = document.getElementById('floating-panel');
@@ -287,9 +310,9 @@
         var dragHandler = function () {
             recalculateDisplayedRoute(directionsDisplay);
         }
-        // document.getElementById('start').addEventListener('change', onChangeHandler);
         document.getElementById('get-weather').addEventListener('click', onChangeHandler);
-        directionsDisplay.addListener('directions_changed', dragHandler) //this listener is the problem...
+        directionsDisplay.addListener('directions_changed', dragHandler);
+        google.maps.event.addListener(map, 'click', (event) => placeWeatherMarker(event.latLng));
     }
     function recalculateDisplayedRoute(directionsDisplay) {
         var weatherPoints = document.getElementById('weather-points').value;
@@ -310,7 +333,7 @@
         }, function (response, status) {
             if (status === 'OK') {
                 var pointsArr = response.routes[0].overview_path;
-                // getAll(weatherPoints, pointsArr);
+                console.log(response);
                 directionsDisplay.setDirections(response);
             } else {
                 window.alert('Directions request failed due to ' + status);
@@ -319,15 +342,15 @@
     }
     function getAll(numOfIntervals, array) {
         clearSummaryPanel();
-        deleteMarkers();
+        deleteMarkers(weatherMarkers);
         var interval = Math.floor(array.length / numOfIntervals);
-        for (var i = 0; i < array.length; i++) {
+        for (var i = 1; i < array.length; i++) {
             if (i % interval == 0) {
-                console.log("i", i)
+                console.log("i", i);
                 var intervalLat = array[i].lat;
                 var intervalLng = array[i].lng;
                 getMarker(intervalLat(), intervalLng());
-                getWeather(intervalLat(), intervalLng());
+                getWeather(intervalLat(), intervalLng(), appendWeatherToSummary);
             }
         };
     }
@@ -338,44 +361,175 @@
             map: map,
             animation: google.maps.Animation.DROP
         })
-        markers.push(marker);
+        weatherMarkers.push(marker);
+        marker.addListener("mouseover", (event) => {
+            console.log(event.latLng.lat());
+        })
     }
-    function getWeather(lat, lng) {
-        console.log("weather lat", lat);
-        var queryURL = "http://api.openweathermap.org/data/2.5/weather?APPID=1af38fcbab6d390a11b52f1a3c19fe7f&units=imperial&lat=" + lat + "&lon=" + lng;
+    function getWeather(lat, lng, callback) {
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?APPID=1af38fcbab6d390a11b52f1a3c19fe7f&units=imperial&lat=" + lat + "&lon=" + lng;
         $.ajax({
             url: queryURL,
             method: "GET",
-        }).then(function (response) {
-            var desc = response.weather[0].description;
-            var temp = response.main.temp;
-            var windSpeed = response.wind.speed;
-            var windDir = response.wind.deg;
-            var panelDiv = $("#summary-panel").append("<p>");
-            console.log(response.coord);
-
-            // <i class="small material-icons right">
-
-            panelDiv.append("<div><strong>Conditions: </strong>" + desc + "</div>");
-            panelDiv.append("<div><strong>Temperature: </strong>" + temp + "</div>");
-            panelDiv.append("<div><strong>Wind Speed: </strong>" + windSpeed + "</div>");
-            panelDiv.append("<div><strong>Wind Direction: </strong>" + windDir + "</div>");
-        })
+        }).then(callback);
+    }
+    function appendWeatherToSummary(response) {
+        console.log(response);
+        var desc = response.weather[0].description;
+        var temp = response.main.temp;
+        var windSpeed = response.wind.speed;
+        var windDir = response.wind.deg;
+        var humidity = response.main.humidity;
+        var icon = "<img id='icon-display' src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
+        var panelDiv = $("#summary-panel").append("<p>");
+        $(panelDiv).attr("data-coord", )
+        console.log(response.coord);
+        panelDiv.append("<div>" + icon + "</div>");
+        // panelDiv.append("<div><strong>Conditions: </strong>" + desc + "</div>");
+        panelDiv.append("<div><img id='temp-icon' src='assets/images/thermometer.png'><span class='text-display'><strong>Temperature: </strong>" + temp + "</span></div>");
+        panelDiv.append("<div><img id='wind-icon' src='assets/images/wind.png'> <span class='text-display'><strong>Wind Speed: </strong>" + windSpeed + "</span></div>");
+        panelDiv.append("<div><img id='direction-icon' src='assets/images/wind-direction.svg'> <span class='text-display'><strong>Wind Direction: </strong>" + windDir + "</span></div>");
+        panelDiv.append("<div><img id='humidity-icon' src='assets/images/humidity.png'> <span class='text-display'><strong>Humidity: </strong>" + humidity + "</span></div><hr>");
+        
     }
     function clearSummaryPanel() {
         $("#summary-panel").empty();
     }
-    function setMapOnAll(map) {
-        for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(map);
+    function setMapOnAll(map, markerArray) {
+        for (var i = 0; i < markerArray.length; i++) {
+            markerArray[i].setMap(map);
         }
     }
-    function deleteMarkers() {
-        setMapOnAll(null);
-        markers = [];
+    function deleteMarkers(markerArray) {
+        setMapOnAll(null, markerArray);
+        markerArray = [];
+    }
+    function getAutocomplete(input, infowindowContent) {
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            startEndMarkers.push(marker);
+            map.panTo(place.geometry.location);
+            // setBounds(startEndMarkers);
+            map.setZoom(12);  // Why 17? Because it looks good.
+            var address = "";
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+        });
+    }
+    function setBounds(markerArray) {
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < markerArray.length; i++) {
+            bounds.extend(markerArray[i].getPosition())
+        }
+        map.fitBounds(bounds);
+    }
+    function placeWeatherMarker(location) {
+        console.log(location);
+        var clickedMarker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+        clickedMarkers.push(clickedMarker);
+        getWeather(location.lat(), location.lng(), function (response) {
+            var latitude = location.lat();
+            var longitude = location.lng();
+            var desc = response.weather[0].description;
+            var temp = response.main.temp;
+            var windSpeed = response.wind.speed;
+            var windDir = response.wind.deg;
+            var icon = "<img src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
+            var popupContent = "<p class = 'popupText'><strong>Weather here: </strong><br>" +
+                + desc + "<br>" +
+                "Temperature: " + temp + "<br>" +
+                "Wind Speed: " + windSpeed + "<br>" +
+                "Wind Direction: " + windDir + "<br></p>";
+            var weatherInfoWindow = new google.maps.InfoWindow({
+                content: popupContent
+            });
+            weatherInfoWindow.open(map, clickedMarker)
+        })
+    }
+    function getAutocomplete(input, infowindowContent) {
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            startEndMarkers.push(marker);
+                map.panTo(place.geometry.location);
+                // setBounds(startEndMarkers);
+                map.setZoom(12);  // Why 17? Because it looks good.
+            var address = "";
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+        });
+    }
+    function setBounds(markerArray) {
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < markerArray.length; i++) {
+            bounds.extend(markerArray[i].getPosition())
+        }
+        map.fitBounds(bounds);
+    }
+    function placeWeatherMarker(location) {
+        console.log(location);
+        var clickedMarker = new google.maps.Marker({
+            position: location, 
+            map: map
+        });
+        clickedMarkers.push(clickedMarker);
+        getWeather(location.lat(), location.lng(), function(response) {
+        var latitude = location.lat();
+        var longitude = location.lng();
+        var desc = response.weather[0].description;
+        var temp = response.main.temp;
+        var windSpeed = response.wind.speed;
+        var windDir = response.wind.deg;
+        var icon = "<img src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
+        var popupContent = "<p class = 'popupText'><strong>Weather here: </strong><br>" + 
+        + desc + "<br>" + 
+        "Temperature: " + temp + "<br>" + 
+        "Wind Speed: " + windSpeed + "<br>" + 
+        "Wind Direction: " + windDir + "<br></p>";
+        var weatherInfoWindow = new google.maps.InfoWindow({
+            content: popupContent
+        });
+        weatherInfoWindow.open(map, clickedMarker)
+        })
     }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqEyqqpMD23rErtt__7gxgYsuA6pfYdOE&callback=initMap">
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqEyqqpMD23rErtt__7gxgYsuA6pfYdOE&libraries=places&callback=initMap">
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
 
