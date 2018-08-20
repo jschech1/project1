@@ -119,6 +119,12 @@
             width: 82%;
         }
 
+        #clearMarkers {
+            position: absolute;
+            left: 50%;
+            /* display: hidden; */
+        }
+
         h3 {
             text-align: center;
         }
@@ -215,6 +221,7 @@
 
 
     <!-- <div id="floating-panel"> -->
+
     <div id="container">
         <div id="route-entry">
             <div id="logo">
@@ -241,6 +248,7 @@
                 <i class="small material-icons right">directions_bike</i>
             </button>
         </div>
+
     </div>
 
 
@@ -248,6 +256,7 @@
     <div id="map">
         <div id="clearMarkers">
             <button id="clearMarkersBtn">Clear Markers</button>
+
         </div>
     </div>
 
@@ -373,6 +382,8 @@
 
     function appendWeatherToSummary(response) {
         console.log(response);
+        console.log(lat);
+
         var desc = response.weather[0].description;
         var temp = response.main.temp;
         var windSpeed = response.wind.speed;
@@ -400,6 +411,7 @@
     function deleteMarkers(markerArray) {
         setMapOnAll(null, markerArray);
         markerArray = [];
+
     }
     function getAutocomplete(input, infowindowContent) {
 
@@ -466,6 +478,74 @@
             weatherInfoWindow.open(map, clickedMarker)
         })
     }
+
+    }
+    function getAutocomplete(input, infowindowContent) {
+
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            startEndMarkers.push(marker);
+                map.panTo(place.geometry.location);
+                // setBounds(startEndMarkers);
+                map.setZoom(12);  // Why 17? Because it looks good.
+
+            var address = "";
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+        });
+    }
+    function setBounds(markerArray) {
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < markerArray.length; i++) {
+            bounds.extend(markerArray[i].getPosition())
+        }
+        map.fitBounds(bounds);
+    }
+    function placeWeatherMarker(location) {
+        console.log(location);
+        var clickedMarker = new google.maps.Marker({
+            position: location, 
+            map: map
+        });
+        clickedMarkers.push(clickedMarker);
+        getWeather(location.lat(), location.lng(), function(response) {
+        var latitude = location.lat();
+        var longitude = location.lng();
+        var desc = response.weather[0].description;
+        var temp = response.main.temp;
+        var windSpeed = response.wind.speed;
+        var windDir = response.wind.deg;
+        var icon = "<img src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
+        var popupContent = "<p class = 'popupText'><strong>Weather here: </strong><br>" + 
+        + desc + "<br>" + 
+        "Temperature: " + temp + "<br>" + 
+        "Wind Speed: " + windSpeed + "<br>" + 
+        "Wind Direction: " + windDir + "<br></p>";
+        var weatherInfoWindow = new google.maps.InfoWindow({
+            content: popupContent
+        });
+        weatherInfoWindow.open(map, clickedMarker)
+        })
+    }
+
 
 
 
