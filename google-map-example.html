@@ -317,8 +317,19 @@
         
 </body>
 
-
+<script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
 <script>
+
+    var config = {
+    apiKey: "AIzaSyCXOmd8axz487uA0HD-ghajDqKsxctSMjQ",
+    authDomain: "windwatch-1bbdd.firebaseapp.com",
+    databaseURL: "https://windwatch-1bbdd.firebaseio.com",
+    projectId: "windwatch-1bbdd",
+    storageBucket: "windwatch-1bbdd.appspot.com",
+    messagingSenderId: "580451818625"
+  };
+ firebase.initializeApp(config);
+ var database = firebase.database();
 
     //our global variables
 
@@ -368,7 +379,21 @@
             count = 0;
         }
 
-        document.getElementById('get-weather').addEventListener('click', onChangeHandler);
+        // document.getElementById('get-weather').addEventListener('click', onChangeHandler);
+        $("#get-weather").on("click", function(event){
+        // document.getElementById('get-weather').addEventListener('click', function (event){
+        event.preventDefault();
+        
+        var routeStart = $("#start").val().trim();
+        var destination = $("#end").val().trim();
+        var routeStore = {
+            start: routeStart,
+            finish: destination
+        }
+        console.log(routeStore);
+        database.ref().push(routeStore);
+        onChangeHandler()
+    });
         directionsDisplay.addListener('directions_changed', dragHandler);
         google.maps.event.addListener(map, 'click', (event) => placeWeatherMarker(event.latLng));
     }
