@@ -538,6 +538,7 @@
         var windSpeed = response.wind.speed;
         var windDir = response.wind.deg;
         var icon = "<img src = 'http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'/>";
+
         var panelDiv = $("#summary-panel");
         var headwindComponent = calculateHeadwindComponent(windSpeed, windDir, heading);
 
@@ -545,6 +546,7 @@
         $(panelDiv).append(item);
         // $(item).append(icon + "<br>");
         $(item).append("<strong>Conditions: </strong>" + desc + "<br>");
+
         $(item).append("<strong>Temperature: </strong>" + temp + " degrees F<br>");
         $(item).append("<strong>Wind Speed: </strong>" + windSpeed + " mph<br>");
         $(item).append("<strong>Wind Direction: </strong>" + windDir.toFixed(2) + " degrees<br>");
