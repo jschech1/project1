@@ -79,10 +79,12 @@
                 text-shadow: 2px 2px black;
             }
     
-            #clearMarkers {
+            #clearMarkersBtn {
                 position: absolute;
-                left: 50%;
-                z-index: 5;
+                left: 40%;
+                float: right;
+                z-index: 10;
+
                 /* display: hidden; */
             }
     
@@ -143,11 +145,6 @@
                 width: 82%;
             }
     
-            #clearMarkers {
-                position: absolute;
-                left: 50%;
-                /* display: hidden; */
-            }
     
             h3 {
                 text-align: center;
@@ -296,7 +293,7 @@
                     <div id = "forecast-time-select">
                     <label for="forecast-times">When is your ride?</label>
                     </div>
-                    <button class="btn waves-effect waves-light" id="get-weather" type="submit" name="action">Get Route
+                    <button class="btn waves-effect waves-light" id="get-weather" tpe="submit" name="action">Get Route
                         <i class="small material-icons right">directions_bike</i>
                     </button>
                 </div>
@@ -307,9 +304,8 @@
             </div>
         
         
-            <!-- <div id="right-panel"></div> -->
             <div id = "summary-panel"></div>
-                    <button id="clearMarkersBtn">Clear Markers</button>
+                    <button class = "btn waves-effect waves-light" id="clearMarkersBtn">Clear Markers</button>
             <div id="map">
         
                 </div>
@@ -742,6 +738,11 @@
 $(document).ready(function() {
     //call to get list of available forecast times
     getForecast(39.739, 104.99, getForecastTimes);
+
+    $("#clearMarkersBtn").on("click", function() {
+        console.log("clickey click");
+        deleteMarkers(clickedMarkers);
+    })
 
     
 })
