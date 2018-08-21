@@ -1,0 +1,200 @@
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    background-color: #b1b1b1;
+}
+#container {
+    background-color: white;
+    width: 70%;
+    margin: 20px auto 10px auto;
+    padding: 5px;
+    border: 1px solid #999;
+    font-family: 'Roboto', 'sans-serif';
+    border-radius: 4px;
+    margin-top: 20px;
+    line-height: 30px;
+    padding-left: 10px;
+    box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+}
+#summary-panel {
+    position: absolute;
+    /* left: 7%; */
+    width: 20%;
+    /* bottom: 30px; */
+    z-index: 5;
+    margin: 60px 65px 10px auto;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #999;
+    text-align: center;
+    font-family: 'Roboto', 'sans-serif';
+    line-height: 30px;
+    padding-left: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+    border-radius: 4px;
+    text-align: center;
+    float: right;
+    height: 90%;
+    overflow: scroll;
+    right: 5%;
+}
+#clearMarkers {
+    position: absolute;
+    left: 50%;
+    /* display: hidden; */
+}
+#floating-panel {
+    position: absolute;
+    top: 10px;
+    left: 25%;
+    z-index: 5;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #999;
+    text-align: center;
+    line-height: 30px;
+    padding-left: 10px;
+}
+#right-panel {
+    line-height: 30px;
+    padding-left: 10px;
+}
+#right-panel select,
+#right-panel input {
+    font-size: 15px;
+}
+#right-panel select {
+    width: 100%;
+}
+#right-panel i {
+    font-size: 12px;
+}
+#right-panel {
+    height: 100%;
+    float: right;
+    width: 390px;
+    overflow: auto;
+}
+#map {
+    height: 100%;
+    width: 90%;
+    border-radius: 4px;
+    float: left;
+    margin: 20px auto 10px 65px;
+}
+#floating-panel {
+    background: #fff;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+    display: none;
+    width: 82%;
+}
+#clearMarkers {
+    position: absolute;
+    left: 50%;
+    /* display: hidden; */
+}
+h3 {
+    text-align: center;
+}
+#route-entry {
+    margin: auto;
+    text-align: center;
+}
+#start {
+    width: 50%;
+    margin: 1px auto 15px auto;
+    display: block;
+    background-color: white;
+}
+#end {
+    width: 50%;
+    margin: -8px auto 1px auto;
+    display: block;
+    background-color: white;
+}
+select {
+    border-color: #9e9e9e;
+}
+#weather-points {
+    display: block;
+    width: 20%;
+    margin: 0 auto 10px auto;
+}
+input::-webkit-input-placeholder {
+    color: gray;
+}
+input {
+    text-indent: 10px;
+}
+i.right {
+    margin-left: 10px;
+}
+#point-options {
+    color: #808080;
+    margin-top: -5px;
+}
+#icon-display {
+    width: 25%;
+    margin: -15px 0px;
+}
+#logo {
+    width: 12%;
+}
+#temp-icon {
+    width: 10%;
+    margin-bottom: -5px;
+}
+#wind-icon {
+    width: 10%;
+    margin-bottom: -5px;
+}
+#direction-icon {
+    width: 10%;
+    margin-bottom: -5px;
+}
+#humidity-icon {
+    width: 10%;
+    margin-bottom: -5px;
+}
+.text-display {
+    font-size: 16px;
+}
+.btn {
+    background-color: #026b54;
+    margin-bottom: 5px;
+}
+hr {
+    width: 90%;
+}
+@media print {
+    #map {
+        height: 500px;
+        margin: 0;
+    }
+    #right-panel {
+        float: none;
+        width: auto;
+    }
+}
+@media screen and (max-width: 768px) {
+    /* The body's bg color will be #333 */
+    body {
+        background-color: #b1b1b1;
+    }
+    /* The wrapper's width will be 600px */
+    .wrapper {
+        width: 600px;
+    }
+    #start,
+    #end,
+    #map,
+        {
+        width: 90%;
+    }
+}
